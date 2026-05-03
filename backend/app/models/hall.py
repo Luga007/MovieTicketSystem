@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, TIMESTAMP, Float
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -11,3 +11,6 @@ class Hall(Base):
     total_seats = Column(Integer)
 
     seats = relationship("Seat", backref="hall")
+
+    
+    showtimes = relationship("Showtime", back_populates="hall")

@@ -12,4 +12,4 @@ class Movie(Base):
     release_date = Column(Date)
     rating = Column(Float)
 
-    showtimes = relationship("Showtime", backref="movie")
+    showtimes = relationship("Showtime", back_populates="movie")

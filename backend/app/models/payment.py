@@ -8,7 +8,7 @@ class Payment(Base):
     payment_id = Column(Integer, primary_key=True)
     booking_id = Column(Integer, ForeignKey("bookings.booking_id"))
 
-    amount = Column(Float)
+    amount = Column(Integer)
     payment_method = Column(String)
     status = Column(String, default="pending")
 

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, Integer, String, TIMESTAMP
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.db.base import Base
@@ -12,8 +12,8 @@ class User(Base):
     password = Column(String)
     number = Column(String)
 
-    role_id = Column(Integer, ForeignKey("roles.role_id"))
+    role = Column(String, default="user")  
+
     created_at = Column(TIMESTAMP, server_default=func.now())
 
-    role = relationship("Role")
     bookings = relationship("Booking", back_populates="user")

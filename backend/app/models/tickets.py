@@ -16,3 +16,5 @@ class Ticket(Base):
     __table_args__ = (
         UniqueConstraint("seat_id", "booking_id", name="unique_ticket"),
     )
+    
+seat = relationship("Seat")

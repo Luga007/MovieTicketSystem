@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.api.deps import get_db
 from app.models.movies import Movie
@@ -19,27 +19,31 @@ def get_movies(db: Session = Depends(get_db)):
     return db.query(Movie).all()
 
 
-@router.post("/showtime")
-def create_showtime(
-    movie_id: int,
-    hall_id: int,
-    start_time: datetime,
-    price: float,
-    db: Session = Depends(get_db)
-):
-    showtime = Showtime(
-        movie_id=movie_id,
-        hall_id=hall_id,
-        start_time=start_time,
-        price=price
-    )
-    db.add(showtime)
+
+@router.put("/{movie_id}")
+def update_movie(movie_id: int, title: str, duration: int, db: Session = Depends(get_db)):
+    movie = db.query(Movie).filter(Movie.movie_id == movie_id).first()
+
+    if not movie:
+        raise HTTPException(status_code=404, detail="Movie not found")
+
+    movie.title = title
+    movie.duration = duration
+
     db.commit()
-    db.refresh(showtime)
-    return showtime
+    db.refresh(movie)
+    return movie
 
 
 
-@router.get("/showtime")
-def get_showtimes(db: Session = Depends(get_db)):
-    return db.query(Showtime).all()
+
+@router.delete("/{movie_id}")
+def delete_movie(movie_id: int, db: Session = Depends(get_db)):
+    movie = db.query(Movie).filter(Movie.movie_id == movie_id).first()
+
+    if not movie:
+        raise HTTPException(status_code=404, detail="Movie not found")
+
+    db.delete(movie)
+    db.commit()
+    return {"message": "Movie deleted"}

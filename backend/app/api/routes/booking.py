@@ -68,3 +68,41 @@ def get_bookings(db: Session = Depends(get_db)):
         })
 
     return result
+
+
+@router.put("/{booking_id}")
+def update_booking(
+    booking_id: int,
+    user_id: int,
+    showtime_id: int,
+    seat_id: int,
+    status: str,
+    db: Session = Depends(get_db)
+):
+    booking = db.query(Booking).filter(Booking.booking_id == booking_id).first()
+
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+
+    booking.user_id = user_id
+    booking.showtime_id = showtime_id
+    booking.seat_id = seat_id
+    booking.status = status  
+
+    db.commit()
+    db.refresh(booking)
+
+    return booking
+
+
+@router.delete("/{booking_id}")
+def delete_booking(booking_id: int, db: Session = Depends(get_db)):
+    booking = db.query(Booking).filter(Booking.booking_id == booking_id).first()
+
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+
+    db.delete(booking)
+    db.commit()
+
+    return {"message": "Booking deleted"}

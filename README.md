@@ -1,0 +1,1 @@
+A movie ticket booking system that allows users to browse cinemas, view movies and showtimes, select seats, and create bookings. It manages relationships between cinemas, halls, seats, movies, showtimes, and users, providing full CRUD operations for each entity.
